@@ -48,11 +48,15 @@ export default class BiddingForm extends Component {
         const { name, amount } = this.state
         const payload = { name, amount }
 
-        await api.placeBid(payload).then(res => {
-            window.alert(`Bid placed successfully`)
+        await api.placeBid(payload).then(result => {
+            window.alert(result.data.message)
             this.setState({
                 name: '',
                 amount: '',
+            })
+        }).catch((error) => {
+            this.setState({
+                error: error.response.data.message
             })
         })
     }

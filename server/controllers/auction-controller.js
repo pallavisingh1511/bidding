@@ -10,13 +10,29 @@ placeBid = (req, res) => {
         })
     }
 
+    // get all the bids for the same user
+    Auction.find({ name: body.name }, (err, bid) => {
+        if (err) {
+            return { success: false, error: err }
+        }
+        if (bid.length >= 3) {
+            return res.status(400).json({
+                err,
+                message: 'You\'ve already placed your bid 3 times',
+            })
+        }
+        return setBid(body, res)
+    }).catch(err => console.log(err))
+}
+
+setBid = async (body, res) => {
     const auction = new Auction(body)
 
     if (!auction) {
         return res.status(400).json({ success: false, error: err })
     }
 
-    auction
+    await auction
         .save()
         .then(() => {
             return res.status(201).json({
