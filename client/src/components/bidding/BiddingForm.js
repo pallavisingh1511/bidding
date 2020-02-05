@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
+import { Link } from 'react-router-dom'
 import './BiddingForm.css';
-import api from '../api'
+import api from '../../api'
 
 const BID_VALUE = {
     MIN: 0,
@@ -85,6 +86,7 @@ export default class BiddingForm extends Component {
                     }
                 </form>
                 <div>{this.state.result}</div>
+                <Link to="/leaderboard">Check Leaderboard</Link>
             </div>
         )
     }

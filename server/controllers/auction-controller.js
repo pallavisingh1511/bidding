@@ -65,6 +65,21 @@ setBid = async (body, res) => {
         })
 
 }
+
+getLeaderboard = async (req, res) => {
+    await Auction.find({}, (err, auction) => {
+        if (err) {
+            return res.status(400).json({ success: false, error: err })
+        }
+        if(auction.length) {
+            return res.status(201).json({
+                success: true,
+                data: auction
+            })
+        }
+    }).sort({"createdAt": 1})
+}
+
 function removeDuplicates (auction) {
     const lookup = auction.reduce((a, e) => {
         a[e.amount] = ++a[e.amount] || 0;
@@ -80,5 +95,6 @@ function removeDuplicates (auction) {
 }
 
 module.exports = {
-    placeBid
+    placeBid,
+    getLeaderboard
 }

@@ -5,9 +5,11 @@ const api = axios.create({
 })
 
 export const placeBid = payload => api.post(`/auction`, payload)
+export const getLeaderboard = () => api.get(`/leaderboard`)
 
 const apis = {
-    placeBid
+    placeBid,
+    getLeaderboard
 }
 
 export default apis

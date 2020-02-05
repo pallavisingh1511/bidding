@@ -1,6 +1,6 @@
 import React from 'react';
 import './App.css';
-import BiddingForm from './components/BiddingForm' 
+import BiddingForm from './components/bidding/BiddingForm' 
 
 function App() {
   return (
