@@ -13,14 +13,16 @@ export default class BiddingForm extends Component {
         this.state = {
             name: '',
             amount: '',
-            error: ''
+            error: '',
+            result: ''
         }
     }
 
     _handleChange = event => {
         this.setState({
             [event.target.name]: event.target.value,
-            error: ''
+            error: '',
+            result: ''
         });
     }
 
@@ -49,10 +51,10 @@ export default class BiddingForm extends Component {
         const payload = { name, amount }
 
         await api.placeBid(payload).then(result => {
-            window.alert(result.data.message)
             this.setState({
                 name: '',
                 amount: '',
+                result: result.data.message
             })
         }).catch((error) => {
             this.setState({
@@ -71,7 +73,7 @@ export default class BiddingForm extends Component {
                         <input className="bidding-input" type="text" name="name" value={this.state.name} onChange={this._handleChange} />
                     </label>
                     <label className="row">
-                        Bid (between 0.01 and 0.99)
+                        Amount (between 0.01 and 0.99)
                         <input className="bidding-input" type="text" name="amount" value={this.state.amount} onChange={this._handleChange} />
                     </label>
                     <input type="submit" value="Submit" className="submit-button" />
@@ -82,6 +84,7 @@ export default class BiddingForm extends Component {
                             </div>
                     }
                 </form>
+                <div>{this.state.result}</div>
             </div>
         )
     }
