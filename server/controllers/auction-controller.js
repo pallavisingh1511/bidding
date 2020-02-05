@@ -35,11 +35,27 @@ setBid = async (body, res) => {
     await auction
         .save()
         .then(() => {
-            return res.status(201).json({
-                success: true,
-                id: auction._id,
-                message: 'Bid placed successfully!',
-            })
+            Auction.find({}, (err, auction) => {
+                if (err) {
+                    return res.status(400).json({ success: false, error: err })
+                }
+                if(auction.length) {
+                    let winner = removeDuplicates(auction)
+                    if (winner === body.name) {
+                        return res.status(201).json({
+                            success: true,
+                            id: auction._id,
+                            message: 'Congratulations! You\'re the winner',
+                        })
+                    } else {
+                        return res.status(201).json({
+                            success: true,
+                            id: auction._id,
+                            message: 'Better luck next time!',
+                        })
+                    }
+                }
+            }).sort({"createdAt": 1})
         })
         .catch(error => {
             return res.status(400).json({
@@ -47,6 +63,20 @@ setBid = async (body, res) => {
                 message: 'Placing bid failed!',
             })
         })
+
+}
+function removeDuplicates (auction) {
+    const lookup = auction.reduce((a, e) => {
+        a[e.amount] = ++a[e.amount] || 0;
+        return a;
+    }, {});
+
+    let uniqueBids = auction.filter(e => !lookup[e.amount])
+    if(uniqueBids.length) {
+        return uniqueBids[0].name
+    } else {
+        return auction[0].name
+    }
 }
 
 module.exports = {
